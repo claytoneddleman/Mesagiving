@@ -6,270 +6,111 @@
 <title>Mesa Campus | Giving Gap Analysis</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
-:root {
-  --black: #101010;
-  --gray: #E7E7E7;
-  --blue: #3B56A3;
-  --orange: #F19E48;
-  --lt-blue: #E0E5F1;
-  --lt-orange: #FDF0E0;
-  --bg: #FAFAFA;
-  --card: #FFFFFF;
-}
-* { margin: 0; padding: 0; box-sizing: border-box; }
-body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--black); }
-.container { max-width: 960px; margin: 0 auto; padding: 2rem 1.5rem; }
-.header { text-align: center; margin-bottom: 3rem; padding-bottom: 2rem; border-bottom: 3px solid var(--blue); }
-.header h1 { font-size: 2.2rem; font-weight: 700; letter-spacing: -0.5px; }
-.header h2 { font-size: 1.3rem; font-weight: 500; color: var(--blue); margin-top: 0.25rem; }
-.header p { font-size: 0.85rem; color: #888; margin-top: 0.5rem; }
-.section-title { font-size: 1.4rem; font-weight: 700; margin-bottom: 0.5rem; }
-.section-sub { font-size: 0.85rem; color: #888; margin-bottom: 1.5rem; }
-
-.key-row { display: flex; gap: 2rem; margin-bottom: 2.5rem; flex-wrap: wrap; }
-.key-item { display: flex; align-items: center; gap: 0.5rem; }
-.key-abbr { font-family: 'DM Mono', monospace; font-weight: 500; color: var(--blue); font-size: 0.95rem; background: var(--lt-blue); padding: 2px 8px; border-radius: 4px; }
-.key-label { font-size: 0.9rem; color: #555; }
-
-.metric-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; margin-bottom: 2rem; }
-.metric-card { background: var(--card); border: 1px solid var(--gray); border-radius: 10px; padding: 1.25rem 1rem; text-align: center; transition: transform 0.15s, box-shadow 0.15s; }
-.metric-card:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.06); }
-.metric-card .label { font-size: 0.75rem; color: #888; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 0.35rem; }
-.metric-card .value { font-family: 'DM Mono', monospace; font-size: 1.35rem; font-weight: 700; color: var(--blue); }
-.metric-card.active { border-color: var(--blue); background: var(--lt-blue); }
-.metric-card.active .value { color: var(--blue); }
-.metric-card.ceiling .value { color: var(--orange); }
-
-.slider-row { display: flex; align-items: center; gap: 1rem; margin-bottom: 0.5rem; }
-.slider-row label { font-size: 0.9rem; color: #555; white-space: nowrap; }
-.slider-row input[type=range] { flex: 1; height: 6px; -webkit-appearance: none; appearance: none; background: var(--gray); border-radius: 3px; outline: none; }
-.slider-row input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; width: 22px; height: 22px; border-radius: 50%; background: var(--blue); cursor: pointer; border: 3px solid white; box-shadow: 0 1px 4px rgba(0,0,0,0.2); }
-.slider-row input[type=range]::-moz-range-thumb { width: 22px; height: 22px; border-radius: 50%; background: var(--blue); cursor: pointer; border: 3px solid white; box-shadow: 0 1px 4px rgba(0,0,0,0.2); }
-.slider-out { font-family: 'DM Mono', monospace; font-size: 1.5rem; font-weight: 700; color: var(--blue); min-width: 60px; text-align: right; }
-.slider-hint { font-size: 0.8rem; color: #999; margin-bottom: 2rem; }
-
-.chart-wrap { position: relative; width: 100%; height: 400px; margin-bottom: 2rem; }
-.legend { display: flex; gap: 1.5rem; margin-bottom: 2.5rem; font-size: 0.8rem; color: #777; }
-.legend span { display: flex; align-items: center; gap: 5px; }
-.legend .dot { width: 12px; height: 12px; border-radius: 3px; }
-
-.gap-table { width: 100%; border-collapse: separate; border-spacing: 0; margin-bottom: 2.5rem; border-radius: 10px; overflow: hidden; border: 1px solid var(--gray); }
-.gap-table th { background: var(--blue); color: white; font-size: 0.75rem; font-weight: 500; text-transform: uppercase; letter-spacing: 0.5px; padding: 0.75rem 0.6rem; text-align: center; }
-.gap-table th:first-child { text-align: left; }
-.gap-table td { padding: 0.6rem; text-align: center; font-size: 0.85rem; border-bottom: 1px solid var(--gray); }
-.gap-table td:first-child { text-align: left; font-weight: 600; }
-.gap-table tr:nth-child(even) td { background: #F7F7F7; }
-.gap-table tr.totals td { background: var(--black); color: white; font-weight: 700; }
-.gap-table tr.unknown td { background: var(--lt-orange); }
-.gap-table .orange { color: var(--orange); font-weight: 600; }
-.gap-table .blue { color: var(--blue); font-weight: 600; }
-.gap-table .mono { font-family: 'DM Mono', monospace; }
-
-.callout { background: var(--lt-blue); border-left: 4px solid var(--blue); border-radius: 0 8px 8px 0; padding: 1rem 1.25rem; margin-bottom: 2.5rem; font-size: 0.9rem; line-height: 1.6; }
-.callout strong { color: var(--blue); }
-
-.data-quality { margin-bottom: 3rem; }
-.dq-table { width: 100%; border-collapse: separate; border-spacing: 0; border-radius: 10px; overflow: hidden; border: 1px solid var(--gray); }
-.dq-table th { background: var(--blue); color: white; font-size: 0.75rem; font-weight: 500; text-transform: uppercase; letter-spacing: 0.5px; padding: 0.65rem; text-align: center; }
-.dq-table th:first-child { text-align: left; }
-.dq-table td { padding: 0.6rem; text-align: center; font-size: 0.85rem; border-bottom: 1px solid var(--gray); }
-.dq-table td:first-child { text-align: left; font-weight: 500; }
-.dq-table tr.warn td { background: var(--lt-orange); }
-
-.section { margin-bottom: 3rem; }
-
-@media (max-width: 640px) {
-  .metric-grid { grid-template-columns: repeat(2, 1fr); }
-  .key-row { flex-direction: column; gap: 0.5rem; }
-}
+:root{--black:#101010;--gray:#E7E7E7;--blue:#3B56A3;--orange:#F19E48;--lt-blue:#E0E5F1;--lt-orange:#FDF0E0;--bg:#FAFAFA;--card:#FFF}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--black)}
+.container{max-width:960px;margin:0 auto;padding:2rem 1.5rem}
+.header{text-align:center;margin-bottom:3rem;padding-bottom:2rem;border-bottom:3px solid var(--blue)}
+.header h1{font-size:2.2rem;font-weight:700;letter-spacing:-.5px}
+.header h2{font-size:1.3rem;font-weight:500;color:var(--blue);margin-top:.25rem}
+.header p{font-size:.85rem;color:#888;margin-top:.5rem}
+.section-title{font-size:1.4rem;font-weight:700;margin-bottom:.5rem}
+.section-sub{font-size:.85rem;color:#888;margin-bottom:1.5rem}
+.key-row{display:flex;gap:2rem;margin-bottom:2.5rem;flex-wrap:wrap}
+.key-item{display:flex;align-items:center;gap:.5rem}
+.key-abbr{font-family:'DM Mono',monospace;font-weight:500;color:var(--blue);font-size:.95rem;background:var(--lt-blue);padding:2px 8px;border-radius:4px}
+.key-label{font-size:.9rem;color:#555}
+.metric-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-bottom:2rem}
+.metric-card{background:var(--card);border:1px solid var(--gray);border-radius:10px;padding:1.25rem 1rem;text-align:center;transition:transform .15s,box-shadow .15s}
+.metric-card:hover{transform:translateY(-2px);box-shadow:0 4px 12px rgba(0,0,0,.06)}
+.metric-card .label{font-size:.75rem;color:#888;text-transform:uppercase;letter-spacing:.5px;margin-bottom:.35rem}
+.metric-card .value{font-family:'DM Mono',monospace;font-size:1.35rem;font-weight:700;color:var(--blue)}
+.metric-card.active{border-color:var(--blue);background:var(--lt-blue)}
+.metric-card.ceiling .value{color:var(--orange)}
+.slider-row{display:flex;align-items:center;gap:1rem;margin-bottom:.5rem}
+.slider-row label{font-size:.9rem;color:#555;white-space:nowrap}
+.slider-row input[type=range]{flex:1;height:6px;-webkit-appearance:none;appearance:none;background:var(--gray);border-radius:3px;outline:none}
+.slider-row input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:22px;height:22px;border-radius:50%;background:var(--blue);cursor:pointer;border:3px solid white;box-shadow:0 1px 4px rgba(0,0,0,.2)}
+.slider-out{font-family:'DM Mono',monospace;font-size:1.5rem;font-weight:700;color:var(--blue);min-width:60px;text-align:right}
+.slider-hint{font-size:.8rem;color:#999;margin-bottom:2rem}
+.chart-wrap{position:relative;width:100%;height:400px;margin-bottom:2rem}
+.legend{display:flex;gap:1.5rem;margin-bottom:2.5rem;font-size:.8rem;color:#777}
+.legend span{display:flex;align-items:center;gap:5px}
+.legend .dot{width:12px;height:12px;border-radius:3px}
+.gap-table{width:100%;border-collapse:separate;border-spacing:0;margin-bottom:2.5rem;border-radius:10px;overflow:hidden;border:1px solid var(--gray)}
+.gap-table th{background:var(--blue);color:white;font-size:.75rem;font-weight:500;text-transform:uppercase;letter-spacing:.5px;padding:.75rem .6rem;text-align:center}
+.gap-table th:first-child{text-align:left}
+.gap-table td{padding:.6rem;text-align:center;font-size:.85rem;border-bottom:1px solid var(--gray)}
+.gap-table td:first-child{text-align:left;font-weight:600}
+.gap-table tr:nth-child(even) td{background:#F7F7F7}
+.gap-table tr.totals td{background:var(--black);color:white;font-weight:700}
+.gap-table tr.unknown td{background:var(--lt-orange)}
+.gap-table .orange{color:var(--orange);font-weight:600}
+.gap-table .blue{color:var(--blue);font-weight:600}
+.gap-table .mono{font-family:'DM Mono',monospace}
+.callout{background:var(--lt-blue);border-left:4px solid var(--blue);border-radius:0 8px 8px 0;padding:1rem 1.25rem;margin-bottom:2.5rem;font-size:.9rem;line-height:1.6}
+.callout strong{color:var(--blue)}
+.callout-warn{background:var(--lt-orange);border-left:4px solid var(--orange);border-radius:0 8px 8px 0;padding:1rem 1.25rem;margin-bottom:2.5rem;font-size:.85rem;line-height:1.6}
+.callout-warn strong{color:var(--orange)}
+.dq-table{width:100%;border-collapse:separate;border-spacing:0;border-radius:10px;overflow:hidden;border:1px solid var(--gray)}
+.dq-table th{background:var(--blue);color:white;font-size:.75rem;font-weight:500;text-transform:uppercase;letter-spacing:.5px;padding:.65rem;text-align:center}
+.dq-table th:first-child{text-align:left}
+.dq-table td{padding:.6rem;text-align:center;font-size:.85rem;border-bottom:1px solid var(--gray)}
+.dq-table td:first-child{text-align:left;font-weight:500}
+.dq-table tr.warn td{background:var(--lt-orange)}
+.method{background:#F7F7F7;border-radius:10px;padding:1.25rem;margin-bottom:2.5rem;font-size:.85rem;line-height:1.7}
+.method h3{font-size:1rem;font-weight:700;margin-bottom:.5rem}
+.method .result{font-weight:700;font-size:.95rem;margin-top:.5rem}
+.section{margin-bottom:3rem}
+@media(max-width:640px){.metric-grid{grid-template-columns:repeat(2,1fr)}.key-row{flex-direction:column;gap:.5rem}}
 </style>
 </head>
 <body>
 <div class="container">
-  <div class="header">
-    <h1>Mesa Campus</h1>
-    <h2>Giving Gap Analysis by Age Group</h2>
-    <p>Rock (Members) vs. MortarStone (Givers) &nbsp;|&nbsp; Aug 2025 to Feb 2026</p>
-  </div>
-
-  <div class="key-row">
-    <div class="key-item"><span class="key-abbr">GPR</span><span class="key-label">Giving Participation Rate</span></div>
-    <div class="key-item"><span class="key-abbr">NGG</span><span class="key-label">Non-Giving Gap</span></div>
-    <div class="key-item"><span class="key-abbr">UGP</span><span class="key-label">Unrealized Giving Potential</span></div>
-  </div>
-
-  <div class="section">
-    <div class="section-title">UGP scenario explorer</div>
-    <div class="section-sub">Drag the slider to model what happens if a percentage of non-givers begin giving at their bracket's average gift.</div>
-
-    <div class="metric-grid">
-      <div class="metric-card" id="card25"><div class="label">25% conversion</div><div class="value" id="v25"></div></div>
-      <div class="metric-card active" id="card50"><div class="label">50% conversion</div><div class="value" id="v50"></div></div>
-      <div class="metric-card" id="card75"><div class="label">75% conversion</div><div class="value" id="v75"></div></div>
-      <div class="metric-card ceiling" id="card100"><div class="label">100% ceiling</div><div class="value" id="v100"></div></div>
-    </div>
-
-    <div class="slider-row">
-      <label>Conversion rate</label>
-      <input type="range" min="5" max="100" value="50" step="5" id="rateSlider" />
-      <span class="slider-out" id="rateOut">50%</span>
-    </div>
-    <div class="slider-hint">What percentage of non-givers in each age group begin giving at their bracket's average?</div>
-
-    <div class="chart-wrap"><canvas id="scenarioChart"></canvas></div>
-    <div class="legend">
-      <span><span class="dot" style="background: #3B56A3;"></span>UGP at selected rate</span>
-      <span><span class="dot" style="background: #F19E48;"></span>Remaining potential (to 100%)</span>
-    </div>
-  </div>
-
-  <div class="section">
-    <div class="section-title">The gap analysis</div>
-    <div class="section-sub">Rock data: Mesa Campus Active Adults. MortarStone data: Giving Breakdown by Age, Aug 1 2025 to Feb 28 2026.</div>
-    <table class="gap-table">
-      <thead><tr><th>Age group</th><th>Rock (members)</th><th>MortarStone (givers)</th><th>NGG</th><th>GPR</th><th>Avg gift</th><th>UGP ($)</th></tr></thead>
-      <tbody id="gapBody"></tbody>
-    </table>
-  </div>
-
-  <div class="section">
-    <div class="section-title">UGP by age group</div>
-    <div class="section-sub">Stacked breakdown: where is the unrealized dollar opportunity concentrated?</div>
-    <div class="chart-wrap"><canvas id="ageChart"></canvas></div>
-    <div class="legend">
-      <span><span class="dot" style="background: #3B56A3;"></span>Current giving</span>
-      <span><span class="dot" style="background: #F19E48;"></span>UGP (at selected rate)</span>
-    </div>
-  </div>
-
-  <div class="section data-quality">
-    <div class="section-title">The data quality problem</div>
-    <div class="section-sub">A significant portion of both databases lack age data, making this analysis directionally correct but incomplete.</div>
-    <table class="dq-table">
-      <thead><tr><th>Metric</th><th>Count</th><th>% of total</th><th>Status</th></tr></thead>
-      <tbody>
-        <tr><td>Rock: total active adults</td><td><strong>5,477</strong></td><td>100%</td><td>---</td></tr>
-        <tr><td>Rock: have age on file</td><td class="blue">3,293</td><td>60.1%</td><td style="color: var(--blue);">&#10003; Known</td></tr>
-        <tr class="warn"><td><strong>Rock: missing age</strong></td><td class="orange">2,184</td><td class="orange">39.9%</td><td class="orange">&#9888; Unknown</td></tr>
-        <tr class="warn"><td><strong>MortarStone: unknown age givers</strong></td><td class="orange">188</td><td class="orange">22.7% of givers</td><td class="orange">&#9888; Unknown</td></tr>
-        <tr class="warn"><td>MortarStone: unknown age giving</td><td class="orange">$383,747</td><td class="orange">15.1% of total $</td><td class="orange">&#9888; Unattributed</td></tr>
-      </tbody>
-    </table>
-  </div>
-
-  <div class="callout">
-    <strong>Combined impact:</strong> 2,184 Rock members have no age (nearly 4 in 10). 188 MortarStone givers (contributing $383,747) also have no age. Until profiles are completed, these gap numbers are conservative and the real opportunity is likely larger.
-  </div>
-
-  <div style="text-align: center; padding: 2rem 0; border-top: 1px solid var(--gray); font-size: 0.75rem; color: #aaa;">
-    Mesa Campus &middot; Central Christian Church &middot; Generated March 2026
-  </div>
+<div class="header"><h1>Mesa Campus</h1><h2>Giving Gap Analysis by Age Group</h2><p>Rock (Households) vs. MortarStone (Giving Households) &nbsp;|&nbsp; Aug 2025 to Feb 2026</p></div>
+<div class="key-row"><div class="key-item"><span class="key-abbr">GPR</span><span class="key-label">Giving Participation Rate</span></div><div class="key-item"><span class="key-abbr">NGG</span><span class="key-label">Non-Giving Gap</span></div><div class="key-item"><span class="key-abbr">UGP</span><span class="key-label">Unrealized Giving Potential</span></div></div>
+<div class="method"><h3>Methodology: household estimation</h3>MortarStone reports by household. Rock lists individuals. To compare apples to apples, we estimated Rock households from 3,200 individuals: every 2 adults sharing a last name = 1 household (assumed couple), solo adults = 1 household, and 3+ of the same name are divided into pairs with remainders counting as additional households.<div class="result">3,200 individuals &rarr; 2,243 estimated households</div></div>
+<div class="callout-warn"><strong>Note on common last names:</strong> This method slightly undercounts households for common surnames. For example, 19 Johnsons become 10 estimated households, but several are likely unrelated families. The same applies to Smith (17 &rarr; 9), Thompson (18 &rarr; 9), and Wilson (17 &rarr; 9). Our 2,243 total is conservative; the real number is likely higher, making GPR slightly lower and UGP slightly larger.</div>
+<div class="section"><div class="section-title">UGP scenario explorer</div><div class="section-sub">Drag the slider to model what happens if a percentage of non-giving households begin giving at their bracket's average gift.</div>
+<div class="metric-grid"><div class="metric-card" id="card25"><div class="label">25% conversion</div><div class="value" id="v25"></div></div><div class="metric-card active" id="card50"><div class="label">50% conversion</div><div class="value" id="v50"></div></div><div class="metric-card" id="card75"><div class="label">75% conversion</div><div class="value" id="v75"></div></div><div class="metric-card ceiling" id="card100"><div class="label">100% ceiling</div><div class="value" id="v100"></div></div></div>
+<div class="slider-row"><label>Conversion rate</label><input type="range" min="5" max="100" value="50" step="5" id="rateSlider" /><span class="slider-out" id="rateOut">50%</span></div>
+<div class="slider-hint">What percentage of non-giving households in each age group begin giving at their bracket's average?</div>
+<div class="chart-wrap"><canvas id="scenarioChart"></canvas></div>
+<div class="legend"><span><span class="dot" style="background:#3B56A3;"></span>UGP at selected rate</span><span><span class="dot" style="background:#F19E48;"></span>Remaining potential (to 100%)</span></div></div>
+<div class="section"><div class="section-title">The gap analysis</div><div class="section-sub">Rock data: Mesa Active Households, estimated to households by last name. MortarStone: Giving Breakdown by Age, Aug 1 2025 to Feb 28 2026.</div>
+<table class="gap-table"><thead><tr><th>Age group</th><th>Rock (households)</th><th>MortarStone (givers)</th><th>NGG</th><th>GPR</th><th>Avg gift</th><th>UGP ($)</th></tr></thead><tbody id="gapBody"></tbody></table></div>
+<div class="section"><div class="section-title">UGP by age group</div><div class="section-sub">Stacked breakdown: where is the unrealized dollar opportunity concentrated?</div>
+<div class="chart-wrap"><canvas id="ageChart"></canvas></div>
+<div class="legend"><span><span class="dot" style="background:#3B56A3;"></span>Current giving</span><span><span class="dot" style="background:#F19E48;"></span>UGP (at selected rate)</span></div></div>
+<div class="section"><div class="section-title">Data notes</div><div class="section-sub">188 MortarStone giving households ($383,747) have no age on file and are excluded from the gap calculation above.</div>
+<table class="dq-table"><thead><tr><th>Metric</th><th>Count</th><th>Detail</th></tr></thead><tbody>
+<tr><td>Rock: estimated households</td><td><strong>2,243</strong></td><td>From 3,200 individuals grouped by last name</td></tr>
+<tr><td>MortarStone: giving households (known age)</td><td class="blue">639</td><td>Giving Aug 2025 to Feb 2026</td></tr>
+<tr><td>Overall GPR</td><td class="blue">28.5%</td><td>639 of 2,243 households</td></tr>
+<tr class="warn"><td><strong>MortarStone: unknown age givers</strong></td><td class="orange">188 households</td><td class="orange">$383,747 in giving unattributed by age</td></tr>
+</tbody></table></div>
+<div style="text-align:center;padding:2rem 0;border-top:1px solid var(--gray);font-size:.75rem;color:#aaa;">Mesa Campus &middot; Central Christian Church &middot; Generated March 2026</div>
 </div>
-
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
 <script>
-const D = [
-  { age: 'Under 20', rock: 289, ms: 8, avg: 1623.72 },
-  { age: '20-29', rock: 367, ms: 22, avg: 1286.23 },
-  { age: '30-39', rock: 427, ms: 53, avg: 1852.98 },
-  { age: '40-49', rock: 563, ms: 85, avg: 3523.43 },
-  { age: '50-59', rock: 526, ms: 114, avg: 4076.44 },
-  { age: '60-69', rock: 600, ms: 173, avg: 3634.34 },
-  { age: '70-79', rock: 388, ms: 134, avg: 3786.67 },
-  { age: '80-89', rock: 123, ms: 47, avg: 2323.23 },
-  { age: '90+', rock: 10, ms: 3, avg: 2273.33 },
-];
-D.forEach(r => { r.gap = r.rock - r.ms; r.ugp = r.gap * r.avg; r.gpr = r.ms / r.rock; r.totalGiving = r.ms * r.avg; });
-const totalUGP = D.reduce((s,r) => s + r.ugp, 0);
-const totalRock = D.reduce((s,r) => s + r.rock, 0);
-const totalMS = D.reduce((s,r) => s + r.ms, 0);
-const totalGap = D.reduce((s,r) => s + r.gap, 0);
-
-const $ = id => document.getElementById(id);
-const fmtD = v => '$' + Math.round(v).toLocaleString();
-const fmtM = v => v >= 1e6 ? '$' + (v/1e6).toFixed(2) + 'M' : v >= 1e3 ? '$' + Math.round(v/1e3) + 'K' : '$' + Math.round(v);
-const fmtPct = v => (v * 100).toFixed(1) + '%';
-
-// Gap table
-const gapBody = $('gapBody');
-D.forEach(r => {
-  const gprColor = r.gpr < 0.15 ? 'orange' : r.gpr < 0.30 ? '' : 'blue';
-  gapBody.innerHTML += `<tr>
-    <td>${r.age}</td><td>${r.rock.toLocaleString()}</td><td>${r.ms}</td>
-    <td class="mono orange">${r.gap.toLocaleString()}</td>
-    <td class="mono ${gprColor}">${fmtPct(r.gpr)}</td>
-    <td class="mono">${fmtD(r.avg)}</td>
-    <td class="mono blue">${fmtD(r.ugp)}</td></tr>`;
-});
-gapBody.innerHTML += `<tr class="totals"><td>TOTALS</td><td>${totalRock.toLocaleString()}</td><td>${totalMS}</td><td>${totalGap.toLocaleString()}</td><td>${fmtPct(totalMS/totalRock)}</td><td>---</td><td>${fmtD(totalUGP)}</td></tr>`;
-gapBody.innerHTML += `<tr class="unknown"><td>Unknown age</td><td class="orange">2,184</td><td class="orange">188</td><td>---</td><td>---</td><td class="mono">$2,041</td><td class="orange">???</td></tr>`;
-
-// Metric cards
-$('v25').textContent = fmtD(totalUGP * 0.25);
-$('v50').textContent = fmtD(totalUGP * 0.50);
-$('v75').textContent = fmtD(totalUGP * 0.75);
-$('v100').textContent = fmtD(totalUGP);
-
-// Scenario chart
-const labels = D.map(r => r.age);
-const maxUGP = D.map(r => r.ugp);
-const scenChart = new Chart($('scenarioChart'), {
-  type: 'bar',
-  data: {
-    labels,
-    datasets: [
-      { label: 'UGP at rate', data: maxUGP.map(v => Math.round(v * 0.5)), backgroundColor: '#3B56A3', borderRadius: 4 },
-      { label: 'Remaining', data: maxUGP.map(v => Math.round(v * 0.5)), backgroundColor: '#F19E48', borderRadius: 4 },
-    ]
-  },
-  options: {
-    responsive: true, maintainAspectRatio: false,
-    plugins: { legend: { display: false }, tooltip: { callbacks: { label: ctx => ctx.dataset.label + ': ' + fmtD(ctx.raw) } } },
-    scales: {
-      x: { stacked: true, ticks: { color: '#888', font: { size: 11 } }, grid: { display: false } },
-      y: { stacked: true, ticks: { color: '#888', font: { size: 11 }, callback: v => fmtM(v) }, grid: { color: 'rgba(0,0,0,0.06)' }, max: Math.max(...maxUGP) * 1.1 }
-    }
-  }
-});
-
-// Age chart (current giving + UGP)
-const ageChart = new Chart($('ageChart'), {
-  type: 'bar',
-  data: {
-    labels,
-    datasets: [
-      { label: 'Current giving', data: D.map(r => Math.round(r.totalGiving)), backgroundColor: '#3B56A3', borderRadius: 4 },
-      { label: 'UGP', data: maxUGP.map(v => Math.round(v * 0.5)), backgroundColor: '#F19E48', borderRadius: 4 },
-    ]
-  },
-  options: {
-    responsive: true, maintainAspectRatio: false,
-    plugins: { legend: { display: false }, tooltip: { callbacks: { label: ctx => ctx.dataset.label + ': ' + fmtD(ctx.raw) } } },
-    scales: {
-      x: { stacked: true, ticks: { color: '#888', font: { size: 11 } }, grid: { display: false } },
-      y: { stacked: true, ticks: { color: '#888', font: { size: 11 }, callback: v => fmtM(v) }, grid: { color: 'rgba(0,0,0,0.06)' } }
-    }
-  }
-});
-
-// Slider
-const slider = $('rateSlider');
-function update(pct) {
-  const r = pct / 100;
-  scenChart.data.datasets[0].data = maxUGP.map(v => Math.round(v * r));
-  scenChart.data.datasets[1].data = maxUGP.map(v => Math.round(v * (1 - r)));
-  scenChart.update();
-  ageChart.data.datasets[1].data = maxUGP.map(v => Math.round(v * r));
-  ageChart.update();
-  $('rateOut').textContent = pct + '%';
-
-  ['card25','card50','card75','card100'].forEach(id => $(id).classList.remove('active'));
-  if (pct === 25) $('card25').classList.add('active');
-  else if (pct === 50) $('card50').classList.add('active');
-  else if (pct === 75) $('card75').classList.add('active');
-  else if (pct === 100) $('card100').classList.add('active');
-}
-slider.addEventListener('input', e => update(+e.target.value));
+const D=[{age:'Under 20',rock:96,ms:8,avg:1623.72},{age:'20-29',rock:173,ms:22,avg:1286.23},{age:'30-39',rock:253,ms:53,avg:1852.98},{age:'40-49',rock:401,ms:85,avg:3523.43},{age:'50-59',rock:407,ms:114,avg:4076.44},{age:'60-69',rock:470,ms:173,avg:3634.34},{age:'70-79',rock:331,ms:134,avg:3786.67},{age:'80-89',rock:103,ms:47,avg:2323.23},{age:'90+',rock:9,ms:3,avg:2273.33}];
+D.forEach(r=>{r.gap=r.rock-r.ms;r.ugp=r.gap*r.avg;r.gpr=r.ms/r.rock;r.totalGiving=r.ms*r.avg});
+const totalUGP=D.reduce((s,r)=>s+r.ugp,0),totalRock=D.reduce((s,r)=>s+r.rock,0),totalMS=D.reduce((s,r)=>s+r.ms,0),totalGap=D.reduce((s,r)=>s+r.gap,0);
+const $=id=>document.getElementById(id);
+const fmtD=v=>'$'+Math.round(v).toLocaleString();
+const fmtM=v=>v>=1e6?'$'+(v/1e6).toFixed(2)+'M':v>=1e3?'$'+Math.round(v/1e3)+'K':'$'+Math.round(v);
+const fmtPct=v=>(v*100).toFixed(1)+'%';
+const gapBody=$('gapBody');
+D.forEach(r=>{const gc=r.gpr<.15?'orange':r.gpr<.3?'':'blue';gapBody.innerHTML+=`<tr><td>${r.age}</td><td>${r.rock.toLocaleString()}</td><td>${r.ms}</td><td class="mono orange">${r.gap.toLocaleString()}</td><td class="mono ${gc}">${fmtPct(r.gpr)}</td><td class="mono">${fmtD(r.avg)}</td><td class="mono blue">${fmtD(r.ugp)}</td></tr>`});
+gapBody.innerHTML+=`<tr class="totals"><td>TOTALS</td><td>${totalRock.toLocaleString()}</td><td>${totalMS}</td><td>${totalGap.toLocaleString()}</td><td>${fmtPct(totalMS/totalRock)}</td><td>---</td><td>${fmtD(totalUGP)}</td></tr>`;
+gapBody.innerHTML+=`<tr class="unknown"><td>Unknown age</td><td>---</td><td class="orange">188</td><td>---</td><td>---</td><td class="mono">$2,041</td><td class="orange">???</td></tr>`;
+$('v25').textContent=fmtD(totalUGP*.25);$('v50').textContent=fmtD(totalUGP*.5);$('v75').textContent=fmtD(totalUGP*.75);$('v100').textContent=fmtD(totalUGP);
+const labels=D.map(r=>r.age),maxUGP=D.map(r=>r.ugp);
+const scenChart=new Chart($('scenarioChart'),{type:'bar',data:{labels,datasets:[{label:'UGP at rate',data:maxUGP.map(v=>Math.round(v*.5)),backgroundColor:'#3B56A3',borderRadius:4},{label:'Remaining',data:maxUGP.map(v=>Math.round(v*.5)),backgroundColor:'#F19E48',borderRadius:4}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>ctx.dataset.label+': '+fmtD(ctx.raw)}}},scales:{x:{stacked:true,ticks:{color:'#888',font:{size:11}},grid:{display:false}},y:{stacked:true,ticks:{color:'#888',font:{size:11},callback:v=>fmtM(v)},grid:{color:'rgba(0,0,0,0.06)'},max:Math.max(...maxUGP)*1.1}}}});
+const ageChart=new Chart($('ageChart'),{type:'bar',data:{labels,datasets:[{label:'Current giving',data:D.map(r=>Math.round(r.totalGiving)),backgroundColor:'#3B56A3',borderRadius:4},{label:'UGP',data:maxUGP.map(v=>Math.round(v*.5)),backgroundColor:'#F19E48',borderRadius:4}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>ctx.dataset.label+': '+fmtD(ctx.raw)}}},scales:{x:{stacked:true,ticks:{color:'#888',font:{size:11}},grid:{display:false}},y:{stacked:true,ticks:{color:'#888',font:{size:11},callback:v=>fmtM(v)},grid:{color:'rgba(0,0,0,0.06)'}}}}});
+const slider=$('rateSlider');
+function update(pct){const r=pct/100;scenChart.data.datasets[0].data=maxUGP.map(v=>Math.round(v*r));scenChart.data.datasets[1].data=maxUGP.map(v=>Math.round(v*(1-r)));scenChart.update();ageChart.data.datasets[1].data=maxUGP.map(v=>Math.round(v*r));ageChart.update();$('rateOut').textContent=pct+'%';['card25','card50','card75','card100'].forEach(id=>$(id).classList.remove('active'));if(pct===25)$('card25').classList.add('active');else if(pct===50)$('card50').classList.add('active');else if(pct===75)$('card75').classList.add('active');else if(pct===100)$('card100').classList.add('active')}
+slider.addEventListener('input',e=>update(+e.target.value));
 </script>
 </body>
 </html>
